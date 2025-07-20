@@ -1,1 +1,61 @@
-ddd
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulář a tabulka</title>
+</head>
+<body>
+<div>
+<table id="data" border="1">
+    <caption>Kontakty</caption>
+    <thead>
+    <tr>
+        <th>Jméno</th>
+        <th>Příjmení</th>
+        <th>Email</th>
+        <th>Telefon</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="4">*************</td>
+    </tr>
+    </tfoot>
+</table>
+</div>
+<br>
+<br>
+<div>
+<form onsubmit="addRow(); return false;">
+    <label for="first_name">Jméno:</label><br>
+    <input type="text" id="first_name" name="first_name"><br><br>
+
+    <label for="last_name">Příjmení:</label><br>
+    <input type="text" id="last_name" name="last_name"><br><br>
+
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email"><br><br>
+
+    <label for="phone">Telefon:</label><br>
+    <input type="tel" id="phone" name="phone"><br><br>
+
+    <input type="submit" value="Odeslat">
+</form>
+</div>
+<script>
+    var addRow = () => {
+        const table = document.getElementById("data").querySelector("tbody");
+        const newRow = table.insertRow(-1);
+
+        ["phone", "email", "last_name", "first_name"].forEach((fieldName) => {
+            const newValue = document.getElementById(fieldName).value;
+            const newCell = newRow.insertCell(0);
+            let newText = document.createTextNode(newValue);
+            newCell.appendChild(newText);
+        });
+    };
+</script>
+</body>
+</html>
