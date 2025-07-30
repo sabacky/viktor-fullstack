@@ -1,0 +1,22 @@
+
+.tabulka-styl {
+    border-collapse: collapse;
+}
+
+.tabulka-styl thead tr,
+.tabulka-styl tfoot tr {
+    border: 2px solid black;
+    font-weight: bold;
+}
+
+.tabulka-styl tbody tr:nth-child(odd) {
+    background-color: #e0e0e0;
+}
+
+.tabulka-styl tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+.tabulka-styl tbody tr:hover {
+    background-color: #cce5ff;
+}
