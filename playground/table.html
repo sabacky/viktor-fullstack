@@ -1,1 +1,118 @@
-ddd
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulář a tabulka</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        .form-flex {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .input {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 200px;
+        }
+
+        .input-tlacitko {
+            display: flex;
+            justify-content: flex-end;
+            flex: 1 1 200px;
+        }
+
+        @media screen and (max-width: 300px) {
+            .input,
+            .input-tlacitko {
+                background-color: blue;
+                flex: 1 1 100%;
+            }
+        }
+
+        @media screen and (min-width: 301px) and (max-width: 600px) {
+            .input,
+            .input-tlacitko {
+                max-width: calc(50% - 1rem);
+                background-color: aqua;
+                flex: 1 1 calc(50% - 1rem);
+            }
+        }
+
+        @media screen and (min-width: 601px) {
+            .input,
+            .input-tlacitko {
+                background-color: lightgreen;
+                flex: 0 0 calc(25% - 1rem);
+                max-width: calc(25% - 1rem);
+            }
+        }
+    </style>
+
+
+
+</head>
+<body>
+<div>
+<table id="data" class="tabulka-styl">
+    <caption>Kontakty</caption>
+    <thead>
+    <tr>
+        <th>Jméno</th>
+        <th>Příjmení</th>
+        <th>Email</th>
+        <th>Telefon</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="4">konec tabulky</td>
+    </tr>
+    </tfoot>
+</table>
+</div>
+<br>
+<br>
+<div class="container">
+    <form onsubmit="addRow(); return false;" class="form-flex">
+<div class="input">
+    <label for="first_name">Jméno:</label>
+    <input type="text" id="first_name" name="first_name">
+</div>
+<div class="input">
+    <label for="last_name">Příjmení:</label>
+    <input type="text" id="last_name" name="last_name">
+</div>
+<div class="input">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email">
+</div>
+<div class="input">
+    <label for="phone">Telefon:</label>
+    <input type="tel" id="phone" name="phone">
+</div>
+<div class="input-tlacitko">
+    <input type="submit" value="Odeslat">
+</div>
+</form>
+</div>
+<script>
+    var addRow = () => {
+        const table = document.getElementById("data").querySelector("tbody");
+        const newRow = table.insertRow(-1);
+
+        ["phone", "email", "last_name", "first_name"].forEach((fieldName) => {
+            const newValue = document.getElementById(fieldName).value;
+            const newCell = newRow.insertCell(0);
+            let newText = document.createTextNode(newValue);
+            newCell.appendChild(newText);
+        });
+    };
+</script>
+</body>
+</html>
