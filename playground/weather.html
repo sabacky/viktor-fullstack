@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Demo</title>
+    <style>
+        #mesta {
+            width: 100%;
+            height: 2.5em;
+            font-size: 1.1em;
+        }
+        #output {
+            margin-top: 1em;
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            min-height: 3em;
+        }
+    </style>
+</head>
+<body>
+<div id="main">
+    <form id="formular">
+        <input id="mesta" type="text" placeholder="Zadej města oddělené čárkou nebo středníkem (nezadávej mezery)" />
+        <button id="weather" type="submit">Zobraz počasí</button>
+    </form>
+    <div id="output"></div>
+    <script src="./weather.js"></script>
+</div>
+</body>
+</html>
