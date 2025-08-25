@@ -26,7 +26,7 @@ const sampleData: EventProps = {
 
 function App() {
     return (
-        <div className="App">
+        <div className="app">
             <Event
                 id={sampleData.id}
                 title={sampleData.title}

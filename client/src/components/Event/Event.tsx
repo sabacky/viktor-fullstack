@@ -1,14 +1,13 @@
 import React from "react";
 import type {EventProps, UserRecord} from "./types";
+import {EventHeader} from "./EventHeader";
 
-export const Event: React.FC<EventProps> = ({location, title, dates}) => {
-    const allNames: string[] = [];
+export const Event: React.FC<EventProps> = ({location, title, dates }) => {
+    const allNames: Set<string> = new Set();
 
     dates.forEach((date) => {
         date.records.forEach((record) => {
-            if (!allNames.includes(record.name)) {
-                allNames.push(record.name);
-            }
+            allNames.add(record.name);
         });
     });
 
@@ -28,9 +27,7 @@ export const Event: React.FC<EventProps> = ({location, title, dates}) => {
 
     return (
         <div>
-            <h2>{title}</h2>
-            {location && <p>Místo: {location}</p>}
-
+            <EventHeader title={title} location={location} />
             {dates.length === 0 ? (
                 <p>Žádné dostupné termíny.</p>
             ) : (
@@ -40,13 +37,13 @@ export const Event: React.FC<EventProps> = ({location, title, dates}) => {
                         <th>Účastník</th>
                         {dates.map((d) => (
                             <th key={d.timestamp}>
-                                {new Date(d.timestamp).toLocaleDateString("cs-CZ")}
+                                {new Date(d.timestamp).toLocaleDateString()}
                             </th>
                         ))}
                     </tr>
                     </thead>
                     <tbody>
-                    {allNames.map((name) => (
+                    {[...allNames].map((name) => (
                         <tr key={name}>
                             <td>{name}</td>
                             {dates.map((d) => {
