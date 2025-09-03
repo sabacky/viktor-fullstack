@@ -1,4 +1,5 @@
-import {useState} from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const NewEventForm = () => {
     const [title, setTitle] = useState("");
@@ -6,6 +7,8 @@ export const NewEventForm = () => {
     const [dates, setDates] = useState<string[]>([""]);
     const [error, setError] = useState<string | null>(null);
     const [success, setSuccess] = useState(false);
+
+    const navigate = useNavigate();
 
     const handleDateChange = (index: number, value: string) => {
         const updated = [...dates];
@@ -27,7 +30,6 @@ export const NewEventForm = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         setError(null);
         setSuccess(false);
 
@@ -52,7 +54,7 @@ export const NewEventForm = () => {
         };
 
         try {
-            const response = await fetch("/api/events", {
+            const response = await fetch("http://localhost:4000/api/events", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -60,15 +62,21 @@ export const NewEventForm = () => {
                 body: JSON.stringify(payload),
             });
 
-            console.log("Odpověď serveru:", response.status);
-            setSuccess(true);
+            if (response.ok) {
+                setSuccess(true);
+                navigate("/events");
+            } else if (response.status === 400) {
+                setError("Neplatná data.");
+            } else {
+                setError("Nastala neočekávaná chyba.");
+            }
         } catch (err) {
-            setError("Nepodařilo se odeslat.");
+            setError("Nepodařilo se odeslat." + err.message);
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{padding: "1rem", maxWidth: "600px", margin: "0 auto"}}>
+        <form onSubmit={handleSubmit} style={{ padding: "1rem", maxWidth: "600px", margin: "0 auto" }}>
             <h1>Nová událost</h1>
 
             <div>
@@ -93,7 +101,7 @@ export const NewEventForm = () => {
             <div>
                 <label>Termíny:</label>
                 {dates.map((date, index) => (
-                    <div key={index} style={{marginBottom: "0.5rem"}}>
+                    <div key={index} style={{ marginBottom: "0.5rem" }}>
                         <input
                             type="date"
                             value={date}
@@ -116,8 +124,8 @@ export const NewEventForm = () => {
 
             <button type="submit">Odeslat</button>
 
-            {error && <p style={{color: "red"}}>{error}</p>}
-            {success && <p style={{color: "green"}}>Odesláno!</p>}
+            {error && <p style={{ color: "red" }}>{error}</p>}
+            {success && <p style={{ color: "green" }}>Odesláno!</p>}
         </form>
     );
 };
