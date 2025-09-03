@@ -13,5 +13,4 @@ export type EventProps = {
     id: string;
     title: string;
     dates: DateRecord[];
-    answers?: Record<string, string[]>;
 };
