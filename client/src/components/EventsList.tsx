@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { EventProps } from "./Event/types";
+import client from "../api/client";
 
 export const EventsList = () => {
     const [data, setData] = useState<EventProps[]>([]);
@@ -8,12 +9,11 @@ export const EventsList = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch("http://localhost:4000/api/events")
-            .then((res) => {
-                if (!res.ok) throw new Error("Chyba při načítání událostí");
-                return res.json();
+        client.GET("/api/events")
+            .then((response) => {
+                if (response.error) throw new Error("Chyba při načítání událostí");
+                setData(response.data?.items || []);
             })
-            .then((json) => setData(json.items))
             .catch((err) => setError(err.message))
             .finally(() => setLoading(false));
     }, []);
@@ -34,4 +34,3 @@ export const EventsList = () => {
         </div>
     );
 };
-

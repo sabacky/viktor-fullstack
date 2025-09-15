@@ -83,8 +83,13 @@ app.post('/api/events', (req, res) => {
         : 0;
 
     const eventWithId = {
-        ...newEvent,
         id: lastId + 1,
+        title: newEvent.title,
+        location: newEvent.location,
+        dates: newEvent.dates.map((timestamp: number) => ({
+            timestamp,
+            records: []
+        }))
     };
 
     events.items.push(eventWithId);

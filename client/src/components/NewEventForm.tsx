@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import client from "../api/client";
 
 export const NewEventForm = () => {
     const [title, setTitle] = useState("");
@@ -54,23 +55,21 @@ export const NewEventForm = () => {
         };
 
         try {
-            const response = await fetch("http://localhost:4000/api/events", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
+            const response = await client.POST("/api/events", {
+                body: payload
             });
 
-            if (response.ok) {
+            if (response.error) {
+                if (response.response?.status === 400) {
+                    setError("Neplatná data.");
+                } else {
+                    setError("Nastala neočekávaná chyba.");
+                }
+            } else {
                 setSuccess(true);
                 navigate("/events");
-            } else if (response.status === 400) {
-                setError("Neplatná data.");
-            } else {
-                setError("Nastala neočekávaná chyba.");
             }
-        } catch (err) {
+        } catch (err: any) {
             setError("Nepodařilo se odeslat." + err.message);
         }
     };
