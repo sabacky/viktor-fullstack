@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Event } from "./Event/Event";
 import type { EventProps } from "./Event/types";
 import { useWeather } from "../hooks/useWeather";
+import client from "../api/client";
 
 export const EventDetail = () => {
     const { id } = useParams<{ id: string }>();
@@ -10,12 +11,19 @@ export const EventDetail = () => {
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
-        fetch(`http://localhost:4000/api/events/${id}`)
-            .then(res => {
-                if (!res.ok) throw new Error("Nepodařilo se načíst událost");
-                return res.json();
+        if (!id) return;
+
+        client.GET("/api/events/{id}", {
+            params: {
+                path: {
+                    id: Number(id)
+                }
+            }
+        })
+            .then(response => {
+                if (response.error) throw new Error("Nepodařilo se načíst událost");
+                if (response.data) setEvent(response.data);
             })
-            .then(data => setEvent(data))
             .catch(err => setError(err.message));
     }, [id]);
 

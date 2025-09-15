@@ -1,0 +1,55 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <title>Swagger UI</title>
+            <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700|Source+Code+Pro:300,600|Titillium+Web:400,600,700" rel="stylesheet">
+            <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.24.2/swagger-ui.css" >
+            <style>
+                html {
+                    box-sizing: border-box;
+                    overflow: -moz-scrollbars-vertical;
+                    overflow-y: scroll;
+                }
+                *,
+                *:before,
+                *:after {
+                    box-sizing: inherit;
+                }
+                body {
+                    margin:0;
+                    background: #fafafa;
+                }
+                .swagger-ui .parameters-col_description input[type=text]{
+                    width: 50vw ;
+                    max-width: 50vw !important;
+                }
+            </style>
+        </head>
+        <body>
+            <div id="swagger-ui"></div>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.24.2/swagger-ui-bundle.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/3.24.2/swagger-ui-standalone-preset.js"></script>
+            <script>
+                window.onload = function() {
+                    var spec = {"openapi":"3.0.0","info":{"title":"Events API","version":"1.0.0","description":"API pro správu událostí a hlasování o termínech"},"servers":[{"url":"http://localhost:4000","description":"Development server"}],"paths":{"/api/events":{"get":{"summary":"Získat seznam všech událostí","description":"Vrací seznam všech dostupných událostí","responses":{"200":{"description":"Seznam událostí","content":{"application/json":{"schema":{"$ref":"#/components/schemas/EventsListResponse"}}}}}},"post":{"summary":"Vytvořit novou událost","description":"Vytvoří novou událost s možnými termíny","requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/CreateEventRequest"}}}},"responses":{"201":{"description":"Událost byla úspěšně vytvořena","content":{"application/json":{"schema":{"$ref":"#/components/schemas/CreateEventResponse"}}}},"400":{"description":"Neplatná data","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}}},"/api/events/{id}":{"get":{"summary":"Získat detail události podle ID","description":"Vrací detail konkrétní události včetně všech hlasování","parameters":[{"name":"id","in":"path","required":true,"description":"ID události","schema":{"type":"integer","minimum":1}}],"responses":{"200":{"description":"Detail události","content":{"application/json":{"schema":{"$ref":"#/components/schemas/Event"}}}},"404":{"description":"Událost nebyla nalezena","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ErrorResponse"}}}}}}}},"components":{"schemas":{"UserRecord":{"type":"object","required":["name","answer"],"properties":{"name":{"type":"string","description":"Jméno účastníka","minLength":1},"answer":{"type":"string","enum":["yes","no","if-needed"],"description":"Odpověď účastníka na daný termín"}}},"DateRecord":{"type":"object","required":["timestamp","records"],"properties":{"timestamp":{"type":"integer","description":"Timestamp termínu v milisekundách"},"records":{"type":"array","items":{"$ref":"#/components/schemas/UserRecord"},"description":"Seznam hlasování pro daný termín"}}},"Event":{"type":"object","required":["id","title","dates"],"properties":{"id":{"type":"integer","description":"Jedinečné ID události"},"title":{"type":"string","description":"Název události","minLength":1},"location":{"type":"string","description":"Místo konání události (volitelné)"},"dates":{"type":"array","items":{"$ref":"#/components/schemas/DateRecord"},"description":"Seznam možných termínů s hlasováními","minItems":1}}},"EventsListResponse":{"type":"object","required":["items"],"properties":{"items":{"type":"array","items":{"$ref":"#/components/schemas/Event"},"description":"Seznam všech událostí"}}},"CreateEventRequest":{"type":"object","required":["title","dates"],"properties":{"title":{"type":"string","description":"Název události","minLength":1},"location":{"type":"string","description":"Místo konání události (volitelné)"},"dates":{"type":"array","items":{"type":"integer","description":"Timestamp termínu v milisekundách"},"description":"Seznam možných termínů","minItems":1,"maxItems":10}}},"CreateEventResponse":{"type":"object","required":["message"],"properties":{"message":{"type":"string","description":"Zpráva o úspěšném vytvoření události"}}},"ErrorResponse":{"type":"object","required":["error"],"properties":{"error":{"type":"string","description":"Popis chyby"}}}}}};
+                    const ui = SwaggerUIBundle({
+                        spec: spec,
+                        dom_id: '#swagger-ui',
+                        deepLinking: true,
+                        presets: [
+                            SwaggerUIBundle.presets.apis,
+                            SwaggerUIStandalonePreset
+                        ],
+                        plugins: [
+                            SwaggerUIBundle.plugins.DownloadUrl
+                        ],
+                        layout: "StandaloneLayout"
+                    });
+                    window.ui = ui;
+                }
+            </script>
+        </body>
+    </html>
+    

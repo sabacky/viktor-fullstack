@@ -7,7 +7,7 @@ import {Navigation} from './components/Navigation';
 import type {EventProps} from './components/Event/types';
 
 const sampleData: EventProps = {
-    id: "1",
+    id: 1,
     title: "Týmové plánování",
     location: "Praha",
     dates: [
